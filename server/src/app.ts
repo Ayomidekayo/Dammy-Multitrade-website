@@ -17,10 +17,18 @@ app.disable("x-powered-by");
 
 const allowedOrigins = [
   "http://localhost:5173",
-  env.CLIENT_URL,
   "https://dammy-multitrade-website-client-self.vercel.app",
-].filter(Boolean);
+  env.CLIENT_URL,
+].filter((origin): origin is string => Boolean(origin));
 
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(
   cors({
     origin: (origin, callback) => {
