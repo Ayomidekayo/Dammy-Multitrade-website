@@ -2,19 +2,36 @@ import express from "express";
 import cors from "cors";
 
 import { env } from "./config/env";
+
 import { notFoundHandler } from "./middleware/not-found.middleware";
 import { errorHandler } from "./middleware/error.middleware";
+
 import authRoutes from "./modules/auth/auth.routes";
-import categoriesRoutes  from "./modules/categories/category.routes"
-import productsRoutes  from "./modules/products/product.routes"
-import siteSettingsRoutes  from "./modules/site-settings/site-settings.routes"
+import categoriesRoutes from "./modules/categories/category.routes";
+import productsRoutes from "./modules/products/product.routes";
+import siteSettingsRoutes from "./modules/site-settings/site-settings.routes";
+
 const app = express();
 
 app.disable("x-powered-by");
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  env.CLIENT_URL,
+  "https://dammy-multitrade-website-client-self.vercel.app",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header, such as health checks.
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
   }),
 );
 
@@ -30,7 +47,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/categories", categoriesRoutes)
+app.use("/api/v1/categories", categoriesRoutes);
 app.use("/api/v1/products", productsRoutes);
 app.use("/api/v1/site-settings", siteSettingsRoutes);
 
