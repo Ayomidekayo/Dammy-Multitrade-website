@@ -145,13 +145,6 @@ export default function SiteSettingsPage() {
     }
   }
 
-  const sections = [
-    { title: "Business information", subtitle: "The identity and message customers see.", icon: Building2 },
-    { title: "Contact details", subtitle: "Phone, WhatsApp and email contact points.", icon: Phone },
-    { title: "Business address", subtitle: "Your public location and opening hours.", icon: MapPin },
-    { title: "Social media", subtitle: "Links to your official business profiles.", icon: Share2 },
-  ];
-
   if (loading) {
     return <div className="flex min-h-64 items-center justify-center gap-3 text-slate-500"><LoaderCircle className="animate-spin text-amber-600" /> Loading website settings...</div>;
   }

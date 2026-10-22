@@ -145,7 +145,7 @@ export default function PublicHeader() {
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#25D366] to-[#16B957] px-4 text-sm font-extrabold text-white shadow-[0_7px_18px_rgba(37,211,102,0.25)] transition duration-200 hover:-translate-y-0.5 hover:from-[#20C45E] hover:to-[#109E49] hover:shadow-[0_10px_22px_rgba(37,211,102,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2"
               >
                 <MessageCircle size={17} fill="currentColor" className="text-white" />
-                Get a Quote
+                Speak with me
                 <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             ) : (
