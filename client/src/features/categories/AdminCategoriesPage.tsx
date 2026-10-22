@@ -493,19 +493,20 @@ export default function AdminCategoriesPage() {
 
   return (
     <section className="mx-auto w-full max-w-[1600px] space-y-6 sm:space-y-7">
-      <header className="relative overflow-hidden rounded-3xl bg-[#0B1220] px-5 py-6 text-white shadow-sm sm:px-7 sm:py-8 lg:px-9">
-        <div className="pointer-events-none absolute -right-10 -top-20 h-64 w-64 rounded-full border border-white/[0.07]" />
-        <div className="pointer-events-none absolute -right-2 -top-12 h-48 w-48 rounded-full border border-white/[0.08]" />
+      <header className="relative overflow-hidden rounded-3xl border border-amber-200/80 bg-gradient-to-br from-white via-amber-50 to-amber-100/80 px-5 py-6 shadow-[0_10px_35px_rgba(180,120,10,0.10)] sm:px-7 sm:py-8 lg:px-9">
+        <div className="pointer-events-none absolute -right-10 -top-20 h-64 w-64 rounded-full border-[24px] border-white/40" />
+        <div className="pointer-events-none absolute -right-2 -top-12 h-48 w-48 rounded-full border-[18px] border-amber-200/30" />
+        <div className="pointer-events-none absolute -bottom-20 right-40 h-44 w-44 rounded-full bg-amber-200/30 blur-3xl" />
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-slate-300">
-              <Layers3 size={14} className="text-[#F5B942]" /> Catalogue
+            <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white/75 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-800 shadow-sm">
+              <Layers3 size={14} className="text-amber-700" /> Catalogue
               management
             </span>
-            <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+            <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-[#0B1220] sm:text-3xl lg:text-4xl">
               Categories
             </h1>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
               Organise products into clear categories so customers can browse
               your catalogue with ease.
             </p>
