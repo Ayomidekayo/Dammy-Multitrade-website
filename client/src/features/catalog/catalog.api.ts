@@ -7,7 +7,7 @@ import type {
 } from "./catalog.types";
 
 const API_BASE = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1"
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1"
 ).replace(/\/$/, "");
 
 async function request<T>(path: string): Promise<T> {
