@@ -13,6 +13,8 @@ import CategoriesPage from "./pages/CategoriesPage";
 import CategoryProductsPage from "./pages/CategoryProductsPage";
 import AdminCategoriesPage from "./features/categories/AdminCategoriesPage";
 import FloatingWhatsAppButton from "./components/public/FloatingWhatsAppButton";
+import ProductDetailPage from "./features/products/ProductDetailPage.professional";
+import PublicProductDetailPage from "./components/public/PublicProductDetailPage";
 
 
 export default function App() {
@@ -38,10 +40,15 @@ export default function App() {
         {/* Public pages */}
         <Route path="/" element={<HomePage />} />
         <Route path="/categories" element={<CategoriesPage />} />
+       
         <Route
           path="/categories/:slug"
           element={<CategoryProductsPage />}
         />
+        <Route
+  path="/products/:slug"
+  element={<PublicProductDetailPage />}
+/>
 
         {/* Admin login */}
         <Route
@@ -70,6 +77,10 @@ export default function App() {
           <Route path="categories" element={<AdminCategoriesPage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="settings" element={<SiteSettingsPage />} />
+           <Route
+  path="products/:id"
+  element={<ProductDetailPage />}
+/>
         </Route>
 
         {/* Unknown routes */}

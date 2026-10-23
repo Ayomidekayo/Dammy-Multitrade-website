@@ -21,6 +21,7 @@ import {
 
 import { apiRequest } from "../../lib/api";
 import ProductFormModal from "../../components/admin/component/ProductFormModel";
+import { Link } from "react-router-dom";
 
 type Availability = "IN_STOCK" | "OUT_OF_STOCK" | "ON_REQUEST";
 
@@ -520,24 +521,35 @@ export default function ProductsPage() {
                         {product.images.length} image
                         {product.images.length === 1 ? "" : "s"}
                       </span>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap items-center justify-end gap-2">
+                        <Link
+                          to={`/admin/products/${product.id}`}
+                          title="View product details"
+                          aria-label={`View ${product.name || "product"} details`}
+                          className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-sky-200 bg-sky-50 px-3 text-xs font-bold text-sky-800 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:bg-sky-100 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+                        >
+                          <Eye size={15} /> <span>View</span>
+                        </Link>
                         <button
                           type="button"
                           onClick={() => {
                             setEditingProduct(product);
                             setShowForm(true);
                           }}
-                          className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-200 px-3 text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-800"
+                          title="Edit product"
+                          aria-label={`Edit ${product.name || "product"}`}
+                          className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 text-xs font-bold text-amber-900 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-amber-300 hover:bg-amber-100 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2"
                         >
-                          <Pencil size={14} /> Edit
+                          <Pencil size={14} /> <span>Edit</span>
                         </button>
                         <button
                           type="button"
                           aria-label={`Delete ${product.name || "product"}`}
+                          title="Delete product"
                           onClick={() => setDeleteTarget(product)}
-                          className="flex size-10 items-center justify-center rounded-lg border border-rose-100 text-rose-600 hover:bg-rose-50"
+                          className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 text-xs font-bold text-rose-700 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-rose-300 hover:bg-rose-100 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={15} /> <span>Delete</span>
                         </button>
                       </div>
                     </div>
@@ -625,25 +637,38 @@ export default function ProductsPage() {
                           {formatDate(product.createdAt)}
                         </td>
                         <td className="px-6 py-4">
-                          <div className="flex justify-end gap-2">
+                          <div className="flex flex-wrap items-center justify-end gap-2">
+                            <Link
+                              to={`/admin/products/${product.id}`}
+                              title="View product details"
+                              aria-label={`View ${product.name || "product"} details`}
+                              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-sky-200 bg-sky-50 px-3 text-xs font-bold text-sky-800 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:bg-sky-100 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2"
+                            >
+                              <Eye size={15} />
+                              <span>View</span>
+                            </Link>
                             <button
                               type="button"
                               onClick={() => {
                                 setEditingProduct(product);
                                 setShowForm(true);
                               }}
-                              className="flex size-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-800"
+                              title="Edit product"
                               aria-label={`Edit ${product.name || "product"}`}
+                              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 text-xs font-bold text-amber-900 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-amber-300 hover:bg-amber-100 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2"
                             >
-                              <Pencil size={16} />
+                              <Pencil size={15} />
+                              <span>Edit</span>
                             </button>
                             <button
                               type="button"
                               onClick={() => setDeleteTarget(product)}
-                              className="flex size-9 items-center justify-center rounded-lg border border-rose-100 text-rose-600 transition hover:bg-rose-50"
+                              title="Delete product"
                               aria-label={`Delete ${product.name || "product"}`}
+                              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 text-xs font-bold text-rose-700 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-rose-300 hover:bg-rose-100 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
                             >
-                              <Trash2 size={16} />
+                              <Trash2 size={15} />
+                              <span>Delete</span>
                             </button>
                           </div>
                         </td>

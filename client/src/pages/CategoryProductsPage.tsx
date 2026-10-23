@@ -273,12 +273,37 @@ export default function CategoryProductsPage() {
               {products.length > 0 ? (
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                   {products.map((product, index) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      whatsapp={settings.whatsapp}
-                      index={index}
-                    />
+                    <div key={product.id} className="group flex min-w-0 flex-col">
+                      <div className="min-w-0 flex-1">
+                        <ProductCard
+                          product={product}
+                          whatsapp={settings.whatsapp}
+                          index={index}
+                        />
+                      </div>
+
+                      {product.slug ? (
+                        <Link
+                          to={`/products/${encodeURIComponent(product.slug)}`}
+                          aria-label={`View details for ${product.name}`}
+                          className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#F5B942]/70 bg-white px-4 py-3 text-sm font-bold text-[#0B1220] shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#F5B942] hover:bg-amber-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B942] focus-visible:ring-offset-2"
+                        >
+                          View product details
+                          <ArrowRight
+                            size={17}
+                            className="transition-transform duration-200 group-hover:translate-x-1"
+                          />
+                        </Link>
+                      ) : (
+                        <span
+                          aria-disabled="true"
+                          title="A product slug is required to open the public detail page."
+                          className="mt-3 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-400"
+                        >
+                          Product details unavailable
+                        </span>
+                      )}
+                    </div>
                   ))}
                 </div>
               ) : (
