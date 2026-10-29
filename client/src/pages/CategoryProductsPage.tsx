@@ -1,33 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  PackageSearch,
-  RefreshCw,
-} from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
-
+import { ArrowLeft, ArrowRight, PackageSearch, RefreshCw } from "lucide-react";
 import PublicHeader from "../components/public/PublicHeader";
 import PublicFooter from "../components/public/PublicFooter";
 import ProductCard from "../features/catalog/ProductCard";
 import { catalogApi } from "../features/catalog/catalog.api";
-import type {
-  Category,
-  Product,
-  SiteSettings,
-} from "../features/catalog/catalog.types";
+import type { Category, Product, SiteSettings } from "../features/catalog/catalog.types";
+
+function readSettingsResponse(response: unknown): SiteSettings {
+  const value = response as any;
+  return (value?.data?.data ?? value?.data ?? value?.settings ?? value ?? {}) as SiteSettings;
+}
 
 export default function CategoryProductsPage() {
   const { slug } = useParams<{ slug: string }>();
-  const reduceMotion = useReducedMotion();
-
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -37,301 +29,116 @@ export default function CategoryProductsPage() {
       setError("");
       setCategory(null);
       setProducts([]);
-
       try {
         const [categories, allProducts, siteSettings] = await Promise.all([
           catalogApi.getCategories(),
           catalogApi.getProducts(),
           catalogApi.getSettings().catch(() => ({} as SiteSettings)),
         ]);
-
         if (!active) return;
-
-        const selectedCategory = categories.find((item) => item.slug === slug);
-
-        setCategory(selectedCategory ?? null);
-        setSettings(siteSettings);
-
+        const selectedCategory = categories.find((item) => item.slug === slug) ?? null;
+        setCategory(selectedCategory);
+        setSettings(readSettingsResponse(siteSettings));
         if (selectedCategory) {
-          setProducts(
-            allProducts.filter(
-              (product) => product.categoryId === selectedCategory.id
-            )
-          );
+          setProducts(allProducts.filter((product) => product.categoryId === selectedCategory.id));
         }
       } catch {
-        if (active) {
-          setError(
-            "We couldn't load this category. Please check your connection and try again."
-          );
-        }
+        if (active) setError("We couldn't load this category. Check your connection and try again.");
       } finally {
         if (active) setLoading(false);
       }
     }
 
     void loadPage();
-
-    return () => {
-      active = false;
-    };
-  }, [slug]);
+    return () => { active = false; };
+  }, [slug, retryKey]);
 
   const categoryDescription = useMemo(
-    () =>
-      category?.description ||
-      "Explore the products in this category and contact our team for availability, specifications and pricing.",
-    [category]
+    () => category?.description || "Browse products in this category and contact our team to confirm specifications, availability and pricing.",
+    [category],
   );
 
-  return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <PublicHeader />
+  const whatsappNumber = (settings.whatsapp || "").replace(/\D/g, "");
+  const whatsappUrl = whatsappNumber
+    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello ${settings.businessName || "Dammy Multitrade Ventures"}. I would like to enquire about ${category?.name || "a product"}.`)}`
+    : null;
 
+  return (
+    <div className="dm-purple-storefront min-h-screen overflow-x-clip bg-white text-[#1A0E2D]">
+      <PublicHeader settings={settings} />
       <main>
         {loading ? (
-          <section className="relative isolate overflow-hidden bg-[#0B1220]">
-            <div
-              className="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
-              style={{ backgroundImage: "url('/images/hero-store.png')" }}
-            />
-            <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-              <div className="h-4 w-36 animate-pulse rounded bg-white/20" />
-              <div className="mt-6 h-12 max-w-xl animate-pulse rounded bg-white/20" />
-              <div className="mt-4 h-5 max-w-lg animate-pulse rounded bg-white/10" />
-            </div>
-          </section>
+          <>
+            <section className="bg-[#1A0E2D] px-4 py-16 sm:px-6 sm:py-20 lg:px-8"><div className="mx-auto max-w-7xl"><div className="h-4 w-32 animate-pulse rounded bg-white/20" /><div className="mt-5 h-10 max-w-xl animate-pulse rounded bg-white/20" /><div className="mt-4 h-4 max-w-lg animate-pulse rounded bg-white/10" /></div></section>
+            <section className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="overflow-hidden rounded-xl border border-slate-200"><div className="aspect-[4/3] animate-pulse bg-[#2A1B3B]" /><div className="space-y-3 p-4"><div className="h-5 w-3/4 animate-pulse rounded bg-[#2A1B3B]" /><div className="h-3 w-full animate-pulse rounded bg-[#2A1B3B]" /><div className="h-10 animate-pulse rounded-lg bg-[#2A1B3B]" /></div></div>)}</section>
+          </>
         ) : error ? (
-          <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
-              <p className="font-semibold text-red-800">{error}</p>
-              <button
-                type="button"
-                onClick={() => window.location.reload()}
-                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0B1220] px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-              >
-                <RefreshCw size={16} /> Reload page
-              </button>
+          <section className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-[#1B102D] p-7 sm:p-10">
+              <RefreshCw className="mx-auto text-[#91620B]" size={30} />
+              <h1 className="mt-4 text-xl font-extrabold">We couldn't load this category.</h1>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{error}</p>
+              <button type="button" onClick={() => setRetryKey((key) => key + 1)} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#1A0E2D] px-4 text-sm font-bold text-white transition hover:bg-[#172943]"><RefreshCw size={16} /> Try again</button>
             </div>
           </section>
         ) : !category ? (
           <section className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
-            <PackageSearch className="mx-auto h-12 w-12 text-slate-300" />
-            <h1 className="mt-5 text-2xl font-black text-[#0B1220]">
-              Category not found
-            </h1>
-            <p className="mt-2 text-sm text-slate-600">
-              This category may have been removed or is no longer available.
-            </p>
-            <Link
-              to="/categories"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#F5B942] px-5 py-3 text-sm font-bold text-[#0B1220] transition hover:bg-[#E8AA2E]"
-            >
-              Browse all categories <ArrowRight size={17} />
-            </Link>
+            <PackageSearch className="mx-auto text-slate-300" size={36} />
+            <h1 className="mt-5 text-2xl font-extrabold">Category not found</h1>
+            <p className="mt-2 text-sm text-slate-600">This category may have been removed or is not available right now.</p>
+            <Link to="/categories" className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#F5B942] px-5 text-sm font-bold text-[#1A0E2D] transition hover:bg-[#E8AA2E]">Browse all categories <ArrowRight size={16} /></Link>
           </section>
         ) : (
           <>
-            {/* Premium category banner: image first, with text on a dark panel */}
-            <motion.section
-              key={category.id}
-              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: "easeOut" }}
-              className="relative isolate overflow-hidden bg-[#0B1220]"
-            >
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-20 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url('${category.coverImageUrl || "/images/hero-store.png"}')`,
-                }}
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 bg-gradient-to-r from-[#07101E]/95 via-[#0B1220]/82 to-[#0B1220]/48"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 bg-gradient-to-t from-[#0B1220]/75 via-transparent to-[#0B1220]/15"
-              />
-
-              <div className="mx-auto max-w-7xl px-4 pb-12 pt-7 sm:px-6 sm:pb-16 lg:px-8 lg:pb-20">
-                <Link
-                  to="/categories"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md transition hover:border-[#F5B942]/60 hover:bg-white/15"
-                >
-                  <ArrowLeft size={16} />
-                  All categories
-                </Link>
-
-                <div className="grid items-end gap-10 pt-12 sm:pt-16 lg:grid-cols-[1fr_300px] lg:gap-14 lg:pt-20">
+            <section className="relative isolate overflow-hidden bg-[#1A0E2D]">
+              <div aria-hidden="true" className="absolute inset-0 -z-20 bg-cover bg-center opacity-35" style={{ backgroundImage: `url('${category.coverImageUrl || "/images/hero-store.png"}')` }} />
+              <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-[#12081F]/95 via-[#1A0E2D]/86 to-[#1A0E2D]/55" />
+              <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+                <Link to="/categories" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-3 text-sm font-semibold text-white transition hover:border-[#F5B942]/70 hover:bg-white/10"><ArrowLeft size={16} /> All categories</Link>
+                <div className="mt-9 grid gap-8 sm:mt-12 lg:grid-cols-[minmax(0,1fr)_240px] lg:items-end">
                   <div className="max-w-3xl">
-                    <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-amber-200 sm:text-sm">
-                      <span className="h-px w-8 bg-[#F5B942]" />
-                      Product category
-                    </p>
-
-                    <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                      {category.name}
-                    </h1>
-
-                    <p className="mt-5 max-w-2xl text-base leading-7 text-slate-200 sm:text-lg sm:leading-8">
-                      {categoryDescription}
-                    </p>
-
-                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                      <a
-                        href="#products"
-                        className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#F5B942] px-5 py-3.5 text-sm font-extrabold text-[#0B1220] shadow-lg transition duration-300 hover:-translate-y-0.5 hover:bg-[#E8AA2E]"
-                      >
-                        Explore products
-                        <ArrowRight
-                          size={18}
-                          className="transition-transform group-hover:translate-x-1"
-                        />
-                      </a>
-                      <Link
-                        to="/categories"
-                        className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/25 bg-white/10 px-5 py-3.5 text-sm font-bold text-white backdrop-blur-md transition hover:border-white/50 hover:bg-white/15"
-                      >
-                        Browse other categories
-                      </Link>
-                    </div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#F5B942] sm:text-xs">Product category</p>
+                    <h1 className="mt-3 break-words text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">{category.name}</h1>
+                    <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-200 sm:text-base sm:leading-8">{categoryDescription}</p>
                   </div>
-
-                  <div className="hidden lg:block">
-                    <div className="rounded-2xl border border-white/20 bg-[#0B1220]/55 p-5 shadow-xl backdrop-blur-xl">
-                      <p className="text-xs font-bold uppercase tracking-[0.17em] text-amber-200">
-                        Category overview
-                      </p>
-                      <p className="mt-3 text-3xl font-black text-white">
-                        {products.length.toString().padStart(2, "0")}
-                        <span className="ml-2 text-sm font-semibold text-slate-300">
-                          {products.length === 1 ? "product" : "products"}
-                        </span>
-                      </p>
-                      <div className="my-4 h-px bg-white/15" />
-                      <p className="flex items-start gap-2 text-sm leading-6 text-slate-200">
-                        <CheckCircle2
-                          size={18}
-                          className="mt-0.5 shrink-0 text-[#F5B942]"
-                        />
-                        Ask our team about product specifications, pricing and
-                        current availability.
-                      </p>
-                    </div>
+                  <div className="rounded-xl border border-white/15 bg-[#081321]/70 p-4 text-white sm:p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#F5B942]">In this category</p>
+                    <p className="mt-2 text-3xl font-extrabold tabular-nums">{products.length.toString().padStart(2, "0")}<span className="ml-2 text-sm font-semibold text-slate-300">{products.length === 1 ? "product" : "products"}</span></p>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">Ask our team to confirm product details before ordering.</p>
+                    {whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-lg bg-[#F5B942] px-3 text-sm font-bold text-[#1A0E2D] transition hover:bg-[#E8AA2E]">Enquire about this category</a>}
                   </div>
                 </div>
               </div>
+            </section>
 
-              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#F5B942]/70 to-transparent" />
-            </motion.section>
-
-            {/* Small image strip on mobile/tablet, using category cover where available */}
-            {category.coverImageUrl && (
-              <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:hidden lg:px-8">
-                <div className="relative h-48 overflow-hidden rounded-2xl sm:h-64">
-                  <img
-                    src={category.coverImageUrl}
-                    alt={`${category.name} category`}
-                    className="h-full w-full object-cover"
-                    loading="eager"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1220]/45 to-transparent" />
-                  <span className="absolute bottom-4 left-4 rounded-full border border-white/25 bg-[#0B1220]/55 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
-                    {category.name}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <section
-              id="products"
-              className="mx-auto max-w-7xl scroll-mt-24 px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
-            >
-              <div className="mb-8 flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#9A6900]">
-                    The collection
-                  </p>
-                  <h2 className="mt-2 text-2xl font-black tracking-tight text-[#0B1220] sm:text-3xl">
-                    Products in this category
-                  </h2>
-                  <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
-                    Explore the available options and contact us for pricing
-                    and product details.
-                  </p>
-                </div>
-
-                <span className="inline-flex w-fit items-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700">
-                  {products.length}{" "}
-                  {products.length === 1 ? "product" : "products"}
-                </span>
+            <section id="products" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+              <div className="mb-7 flex flex-col gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                <div><p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#91620B]">The catalogue</p><h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">Products in {category.name}</h2><p className="mt-2 text-sm leading-6 text-slate-600">Select a product to see its images and information.</p></div>
+                <span className="inline-flex min-h-9 w-fit items-center rounded-full border border-slate-200 bg-[#1B102D] px-3 text-xs font-bold text-slate-600">{products.length} {products.length === 1 ? "product" : "products"}</span>
               </div>
 
               {products.length > 0 ? (
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                   {products.map((product, index) => (
-                    <div key={product.id} className="group flex min-w-0 flex-col">
-                      <div className="min-w-0 flex-1">
-                        <ProductCard
-                          product={product}
-                          whatsapp={settings.whatsapp}
-                          index={index}
-                        />
-                      </div>
-
-                      {product.slug ? (
-                        <Link
-                          to={`/products/${encodeURIComponent(product.slug)}`}
-                          aria-label={`View details for ${product.name}`}
-                          className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#F5B942]/70 bg-white px-4 py-3 text-sm font-bold text-[#0B1220] shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#F5B942] hover:bg-amber-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B942] focus-visible:ring-offset-2"
-                        >
-                          View product details
-                          <ArrowRight
-                            size={17}
-                            className="transition-transform duration-200 group-hover:translate-x-1"
-                          />
-                        </Link>
-                      ) : (
-                        <span
-                          aria-disabled="true"
-                          title="A product slug is required to open the public detail page."
-                          className="mt-3 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-400"
-                        >
-                          Product details unavailable
-                        </span>
-                      )}
-                    </div>
+                    <article key={product.id} className="flex min-w-0 flex-col rounded-xl border border-slate-200 bg-white p-2.5 transition duration-200 hover:-translate-y-0.5 hover:border-[#D9A52E]/70 hover:shadow-lg hover:shadow-slate-900/5 sm:p-3">
+                      <div className="min-w-0 flex-1"><ProductCard product={product} whatsapp={settings.whatsapp} index={index} /></div>
+                      {product.slug ? <Link to={`/products/${encodeURIComponent(product.slug)}`} aria-label={`View details for ${product.name}`} className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#D9A52E]/70 bg-[#2B1C3F] px-4 text-sm font-bold text-[#1A0E2D] transition hover:border-[#C28A16] hover:bg-[#F8E8BD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5B942] focus-visible:ring-offset-2">View product details <ArrowRight size={16} /></Link> : <span aria-disabled="true" title="Product slug is not available" className="mt-3 inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center rounded-lg border border-slate-200 bg-[#211432] px-4 text-sm font-semibold text-slate-400">Details unavailable</span>}
+                    </article>
                   ))}
                 </div>
               ) : (
-                <div className="relative overflow-hidden rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-5 py-16 text-center sm:py-20">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-[#9A6900]">
-                    <PackageSearch size={27} />
-                  </div>
-                  <h3 className="mt-5 text-xl font-extrabold text-[#0B1220]">
-                    Products coming soon
-                  </h3>
-                  <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
-                    We haven't added products to this category yet. Contact our
-                    team if you need help finding a specific item.
-                  </p>
-                  <Link
-                    to="/categories"
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#F5B942] px-5 py-3 text-sm font-bold text-[#0B1220] transition hover:bg-[#E8AA2E]"
-                  >
-                    Explore other categories <ArrowRight size={17} />
-                  </Link>
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-[#1B102D] px-5 py-14 text-center sm:py-16">
+                  <span className="mx-auto flex size-14 items-center justify-center rounded-xl bg-[#FFF2CC] text-[#76520D]"><PackageSearch size={25} /></span>
+                  <h3 className="mt-4 text-xl font-extrabold">No products in this category yet</h3>
+                  <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">Contact our team if you are looking for a particular item. We can help you check availability.</p>
+                  <Link to="/#contact" className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#F5B942] px-5 text-sm font-bold text-[#1A0E2D] transition hover:bg-[#E8AA2E]">Contact our team <ArrowRight size={16} /></Link>
                 </div>
               )}
             </section>
           </>
         )}
       </main>
-
-      <PublicFooter />
+      <PublicFooter settings={settings} />
     </div>
   );
 }

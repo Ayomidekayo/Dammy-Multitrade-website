@@ -1,0 +1,170 @@
+/* Dammy Multitrade Ventures — purple/gold storefront system.
+   Scoped to the public storefront so the admin dashboard is unaffected. */
+:root {
+  --dm-purple-950: #10071d;
+  --dm-purple-900: #160b28;
+  --dm-purple-850: #1b102d;
+  --dm-purple-800: #211432;
+  --dm-purple-750: #281a3b;
+  --dm-purple-700: #332247;
+  --dm-purple-border: #493459;
+  --dm-lavender: #d9cde9;
+  --dm-muted: #c4b6d5;
+  --dm-gold: #f5b942;
+  --dm-gold-soft: #d9b65f;
+}
+
+.dm-purple-storefront {
+  background: var(--dm-purple-900) !important;
+  color: #faf7ff;
+  color-scheme: dark;
+}
+
+/* Turn the existing white/slate utility surfaces into layered purple surfaces. */
+.dm-purple-storefront [class~="bg-white"],
+.dm-purple-storefront [class~="bg-white/95"],
+.dm-purple-storefront [class~="bg-white/90"] {
+  background-color: var(--dm-purple-800) !important;
+}
+.dm-purple-storefront [class~="bg-white/5"] { background-color: rgb(255 255 255 / 0.055) !important; }
+.dm-purple-storefront [class~="bg-white/10"] { background-color: rgb(255 255 255 / 0.10) !important; }
+.dm-purple-storefront [class~="bg-white/15"] { background-color: rgb(255 255 255 / 0.15) !important; }
+.dm-purple-storefront [class~="bg-slate-50"],
+.dm-purple-storefront [class~="bg-[#F7F8FA]"] { background-color: var(--dm-purple-850) !important; }
+.dm-purple-storefront [class~="bg-slate-100"],
+.dm-purple-storefront [class~="bg-[#F2F4F6]"] { background-color: var(--dm-purple-750) !important; }
+.dm-purple-storefront [class~="bg-slate-200"] { background-color: #3a2a4e !important; }
+.dm-purple-storefront [class~="bg-[#FFF9E9]"],
+.dm-purple-storefront [class~="bg-[#FFF6DD]"] { background-color: #2b1c3f !important; }
+
+.dm-purple-storefront [class~="text-[#0B1220]"],
+.dm-purple-storefront [class~="text-[#1A0E2D]"],
+.dm-purple-storefront [class~="text-slate-900"],
+.dm-purple-storefront [class~="text-slate-800"] { color: #faf7ff !important; }
+.dm-purple-storefront [class~="text-slate-700"] { color: #e1d7ed !important; }
+.dm-purple-storefront [class~="text-slate-600"],
+.dm-purple-storefront [class~="text-slate-500"] { color: var(--dm-muted) !important; }
+.dm-purple-storefront [class~="text-slate-400"] { color: #aa9abd !important; }
+.dm-purple-storefront [class~="text-[#91620B]"],
+.dm-purple-storefront [class~="text-[#8D5A00]"],
+.dm-purple-storefront [class~="text-[#76520D]"],
+.dm-purple-storefront [class~="text-[#78520D]"],
+.dm-purple-storefront [class~="text-[#80580A]"],
+.dm-purple-storefront [class~="text-[#8C6414]"] { color: #ebc86f !important; }
+.dm-purple-storefront [class~="border-slate-200"],
+.dm-purple-storefront [class~="border-slate-300"],
+.dm-purple-storefront [class~="border-slate-100"] { border-color: var(--dm-purple-border) !important; }
+.dm-purple-storefront [class~="divide-slate-100"] > :not([hidden]) ~ :not([hidden]),
+.dm-purple-storefront [class~="divide-slate-200"] > :not([hidden]) ~ :not([hidden]) { border-color: var(--dm-purple-border) !important; }
+
+/* Inputs remain easy to read, including search and mobile navigation. */
+.dm-purple-storefront input,
+.dm-purple-storefront select,
+.dm-purple-storefront textarea {
+  background-color: #2a1b3b;
+  border-color: #594269;
+  color: #faf7ff;
+}
+.dm-purple-storefront input::placeholder,
+.dm-purple-storefront textarea::placeholder { color: #b8a8cb; }
+.dm-purple-storefront input:focus,
+.dm-purple-storefront select:focus,
+.dm-purple-storefront textarea:focus { border-color: var(--dm-gold); }
+.dm-purple-storefront option { background: #211432; color: #faf7ff; }
+
+/* Protect high-priority gold actions from the purple-surface and text rules above. */
+.dm-purple-storefront [class~="bg-[#F5B942]"][class~="text-[#0B1220]"],
+.dm-purple-storefront [class~="bg-[#E8AA2E]"][class~="text-[#0B1220]"],
+.dm-purple-storefront [class~="bg-[#E9AA2D]"][class~="text-[#0B1220]"],
+.dm-purple-storefront [class~="bg-[#F5B942]"][class~="text-[#1A0E2D]"],
+.dm-purple-storefront [class~="bg-[#E8AA2E]"][class~="text-[#1A0E2D]"],
+.dm-purple-storefront [class~="bg-[#E9AA2D]"][class~="text-[#1A0E2D]"] { color: #160b28 !important; }
+.dm-purple-storefront a[class~="bg-[#F5B942]"],
+.dm-purple-storefront button[class~="bg-[#F5B942]"] { color: #160b28; }
+
+.dm-public-header {
+  background-color: rgb(22 11 40 / 0.96) !important;
+  border-color: #493459 !important;
+  color: #faf7ff;
+}
+.dm-public-header [class~="bg-[#0B1220]"],
+.dm-public-header [class~="bg-[#10071D]"] { background-color: var(--dm-purple-950) !important; }
+.dm-public-header [class~="text-slate-600"],
+.dm-public-header [class~="text-slate-700"] { color: #ded3ed !important; }
+.dm-public-header [class~="border-slate-200"],
+.dm-public-header [class~="border-slate-100"] { border-color: var(--dm-purple-border) !important; }
+.dm-public-header a:focus-visible,
+.dm-public-header button:focus-visible,
+.dm-purple-storefront a:focus-visible,
+.dm-purple-storefront button:focus-visible { outline-offset: 3px; }
+
+.dm-public-footer { border-top: 1px solid #493459; }
+.dm-public-footer [class~="border-white/10"] { border-color: #493459 !important; }
+
+/* A deliberate service ticker: useful product terms, no flashing or aggressive movement. */
+.dm-service-ticker {
+  overflow: hidden;
+  border-top: 1px solid rgb(245 185 66 / 0.22);
+  border-bottom: 1px solid rgb(245 185 66 / 0.16);
+  background: linear-gradient(90deg, #10071d, #211432 50%, #10071d);
+  color: #e6d9f2;
+}
+.dm-service-ticker__track {
+  display: flex;
+  width: max-content;
+  animation: dm-ticker-scroll 42s linear infinite;
+  will-change: transform;
+}
+.dm-service-ticker:hover .dm-service-ticker__track,
+.dm-service-ticker:focus-within .dm-service-ticker__track { animation-play-state: paused; }
+.dm-service-ticker__group {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding: 0.68rem 1.4rem;
+  white-space: nowrap;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.dm-service-ticker__group i {
+  display: inline-block;
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 50%;
+  background: var(--dm-gold);
+  box-shadow: 0 0 0 3px rgb(245 185 66 / 0.10);
+}
+@keyframes dm-ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Product and category cards preserve contrast while sitting inside the purple canvas. */
+.dm-purple-storefront article.group,
+.dm-purple-storefront article[class*="rounded-xl"],
+.dm-purple-storefront article[class*="rounded-2xl"],
+.dm-purple-storefront .group.overflow-hidden.rounded-xl,
+.dm-purple-storefront .group.overflow-hidden.rounded-2xl {
+  border-color: var(--dm-purple-border) !important;
+  background-color: var(--dm-purple-800) !important;
+}
+.dm-purple-storefront article.group:hover,
+.dm-purple-storefront article[class*="rounded-xl"]:hover,
+.dm-purple-storefront .group.overflow-hidden.rounded-xl:hover,
+.dm-purple-storefront .group.overflow-hidden.rounded-2xl:hover { border-color: #9e7cba !important; }
+.dm-purple-storefront [class*="animate-pulse"] { background-color: #39284d !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-service-ticker__track { animation: none; }
+  .dm-purple-storefront *, .dm-purple-storefront *::before, .dm-purple-storefront *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@media (max-width: 420px) {
+  .dm-service-ticker__group { gap: 1rem; padding-inline: 1rem; font-size: 0.62rem; }
+}
