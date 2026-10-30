@@ -4,7 +4,7 @@ import {
   ArrowUpRight,
   Boxes,
   CheckCircle2,
-  Clock3,
+  
   Image as ImageIcon,
   Layers3,
   Package,
@@ -12,7 +12,6 @@ import {
   RefreshCw,
   Settings2,
   ShieldCheck,
-  Upload,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
