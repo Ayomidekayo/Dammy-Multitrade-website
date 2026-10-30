@@ -168,13 +168,6 @@ const quickActions: Array<{
     accent: "blue",
   },
   {
-    title: "Gallery",
-    description: "Update your business imagery.",
-    icon: Upload,
-    to: "/admin/gallery",
-    accent: "purple",
-  },
-  {
     title: "Website settings",
     description: "Keep business information up to date.",
     icon: Settings2,
@@ -241,7 +234,7 @@ export default function DashboardPage() {
     : "";
 
   return (
-    <div className="min-w-0 space-y-6 pb-4 sm:space-y-8">
+    <div className="dm-admin-page min-w-0 space-y-6 pb-4 sm:space-y-8">
       <style>{`
         @keyframes dashboard-rise {
           from { opacity: 0; transform: translateY(10px); }
@@ -339,7 +332,7 @@ export default function DashboardPage() {
       <section className="dashboard-enter dashboard-delay-1">
         <div className="mb-4 flex items-end justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700">Overview</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-200">Workspace metrics</p>
             <h2 className="mt-1 text-lg font-bold tracking-tight text-slate-950">Catalogue summary</h2>
             <p className="mt-1 text-sm text-slate-500">A quick snapshot of your content.</p>
           </div>
@@ -354,11 +347,10 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
           <StatCard title="Categories" value={stats.categories} caption="In your catalogue" icon={Layers3} accent="gold" loading={loading} to="/admin/categories" />
           <StatCard title="Active" value={stats.activeCategories} caption="Currently visible" icon={CheckCircle2} accent="green" loading={loading} to="/admin/categories" />
           <StatCard title="Products" value="—" caption="Product overview" icon={Package} accent="blue" to="/admin/products" />
-          <StatCard title="Gallery" value="—" caption="Business images" icon={ImageIcon} accent="purple" to="/admin/gallery" />
         </div>
       </section>
 
@@ -523,7 +515,7 @@ export default function DashboardPage() {
       {/* Shortcuts */}
       <section className="dashboard-enter dashboard-delay-3 space-y-4">
         <SectionHeading title="Quick actions" description="Go directly to the tools you use most." />
-        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 xl:grid-cols-3">
           {quickActions.map((action) => {
             const Icon = action.icon;
             const iconStyle = accentStyles[action.accent].icon;

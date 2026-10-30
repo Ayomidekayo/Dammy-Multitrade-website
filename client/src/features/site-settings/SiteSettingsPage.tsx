@@ -150,7 +150,7 @@ export default function SiteSettingsPage() {
   }
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6 text-slate-800 sm:space-y-8">
+    <section className="dm-admin-page mx-auto w-full max-w-6xl space-y-6 text-slate-800 sm:space-y-8">
       <header className="rounded-3xl border border-amber-100 bg-gradient-to-br from-white via-amber-50/70 to-orange-50/50 p-5 shadow-sm sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>

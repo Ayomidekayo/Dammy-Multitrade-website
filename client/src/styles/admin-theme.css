@@ -1,0 +1,239 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --admin-purple-950: #10071d;
+  --admin-purple-900: #160b28;
+  --admin-purple-850: #1b102d;
+  --admin-purple-800: #241535;
+  --admin-purple-750: #2d1b41;
+  --admin-purple-700: #39224f;
+  --admin-purple-border: #4a345f;
+  --admin-purple-bright: #8b5cf6;
+  --admin-purple-soft: #c4b5fd;
+  --admin-gold: #f5b942;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+/* Keep native controls dark only inside the admin, not across the public storefront. */
+.dm-admin-shell, .dm-admin-login, .dm-admin-page { color-scheme: dark; }
+
+/* Main authenticated shell */
+.dm-admin-shell {
+  min-height: 100vh;
+  color: #f8f5ff;
+  background:
+    radial-gradient(ellipse at 82% 0%, rgb(109 40 217 / .15), transparent 34rem),
+    linear-gradient(150deg, #10071d 0%, #160b28 48%, #1b102d 100%);
+}
+.dm-admin-topbar {
+  background: rgb(22 11 40 / .88);
+  border-color: rgb(196 181 253 / .14) !important;
+  color: #faf7ff;
+  backdrop-filter: blur(18px);
+}
+.dm-admin-sidebar {
+  color: #faf7ff;
+  background: linear-gradient(180deg, #160b28 0%, #12091f 100%) !important;
+  border-color: rgb(196 181 253 / .13) !important;
+}
+.dm-admin-brand-mark {
+  background: linear-gradient(135deg, #f7d783 0%, #f5b942 48%, #c88a19 100%);
+  color: #20112f;
+}
+.dm-admin-nav-link { color: #c4b6d9; }
+.dm-admin-nav-link:hover { color: #fff; background: rgb(196 181 253 / .08); }
+.dm-admin-nav-link[aria-current="page"] {
+  color: #fff !important;
+  background: linear-gradient(115deg, #6d28d9, #7c3aed 60%, #8b5cf6) !important;
+  box-shadow: 0 9px 24px rgb(76 29 149 / .28);
+}
+.dm-admin-nav-link[aria-current="page"] .dm-admin-nav-icon {
+  background: rgb(255 255 255 / .15) !important;
+  color: #f9dd91 !important;
+}
+.dm-admin-logout {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  border: 1px solid rgb(248 113 113 / .32);
+  border-radius: .85rem;
+  background: rgb(225 29 72 / .10);
+  color: #fecaca;
+  font-size: .84rem;
+  font-weight: 700;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.dm-admin-logout:hover { background: rgb(225 29 72 / .19); border-color: rgb(248 113 113 / .6); transform: translateY(-1px); }
+.dm-admin-logout:focus-visible { outline: 2px solid #f5b942; outline-offset: 3px; }
+
+/* Page canvas is purple; panels use layered plum rather than flat white. */
+.dm-admin-page { color: #f6f0ff !important; }
+.dm-admin-page [class~="bg-white"],
+.dm-admin-page [class~="bg-white/95"],
+.dm-admin-page [class~="bg-white/90"],
+.dm-admin-page [class~="bg-white/80"],
+.dm-admin-page [class~="bg-white/75"],
+.dm-admin-page [class~="bg-white/70"] { background-color: #241535 !important; }
+.dm-admin-page [class~="bg-slate-50"],
+.dm-admin-page [class~="bg-slate-50/70"],
+.dm-admin-page [class~="bg-slate-100"],
+.dm-admin-page [class~="bg-slate-100/80"] { background-color: #1d102f !important; }
+.dm-admin-page [class~="bg-slate-200"] { background-color: #39244f !important; }
+.dm-admin-page [class~="bg-amber-50"],
+.dm-admin-page [class~="bg-amber-50/30"],
+.dm-admin-page [class~="bg-amber-50/40"],
+.dm-admin-page [class~="bg-amber-50/70"],
+.dm-admin-page [class~="bg-amber-100"],
+.dm-admin-page [class~="bg-amber-100/50"],
+.dm-admin-page [class~="bg-amber-100/80"] { background-color: #39264b !important; }
+.dm-admin-page [class~="bg-violet-50"],
+.dm-admin-page [class~="bg-blue-50"],
+.dm-admin-page [class~="bg-sky-50"] { background-color: #302044 !important; }
+.dm-admin-page [class~="bg-emerald-50"] { background-color: #123a35 !important; }
+.dm-admin-page [class~="bg-rose-50"],
+.dm-admin-page [class~="bg-red-50"] { background-color: #451d38 !important; }
+.dm-admin-page [class~="bg-slate-900"],
+.dm-admin-page [class~="bg-slate-950"] { background-color: #10071d !important; }
+
+/* Rich purple hero headers unify dashboard, categories, products and settings. */
+.dm-admin-page > header,
+.dm-admin-page > section > header,
+.dm-admin-page > .dashboard-enter.relative.isolate {
+  color: #fbf8ff !important;
+  border-color: #5a3b77 !important;
+  background: linear-gradient(120deg, #2c1744 0%, #3b1d5d 52%, #241238 100%) !important;
+  box-shadow: 0 18px 46px rgb(8 3 15 / .22) !important;
+}
+.dm-admin-page > header h1,
+.dm-admin-page > section > header h1,
+.dm-admin-page > .dashboard-enter.relative.isolate h1 { color: #fff !important; }
+.dm-admin-page article,
+.dm-admin-page [class*="rounded-2xl border"],
+.dm-admin-page [class*="rounded-3xl border"] {
+  border-color: #49335e;
+}
+.dm-admin-page article[class*="bg-white"],
+.dm-admin-page section[class*="bg-white"] { background-color: #241535; }
+.dm-admin-page [class~="text-[#0B1220]"],
+.dm-admin-page [class~="text-[#1A0E2D]"],
+.dm-admin-page [class~="text-slate-950"],
+.dm-admin-page [class~="text-slate-900"],
+.dm-admin-page [class~="text-slate-800"] { color: #f9f5ff !important; }
+.dm-admin-page [class~="text-slate-700"] { color: #e5d9f4 !important; }
+.dm-admin-page [class~="text-slate-600"],
+.dm-admin-page [class~="text-slate-500"] { color: #bfaed5 !important; }
+.dm-admin-page [class~="text-slate-400"] { color: #9e8cb8 !important; }
+.dm-admin-page [class~="border-slate-200"],
+.dm-admin-page [class~="border-slate-300"],
+.dm-admin-page [class~="border-slate-100"] { border-color: #49335e !important; }
+.dm-admin-page [class~="divide-slate-100"] > :not([hidden]) ~ :not([hidden]),
+.dm-admin-page [class~="divide-slate-200"] > :not([hidden]) ~ :not([hidden]) { border-color: #49335e !important; }
+.dm-admin-page [class~="bg-gradient-to-br"],
+.dm-admin-page [class~="bg-gradient-to-r"] { background-image: linear-gradient(135deg, #2b1940 0%, #241535 58%, #321b4c 100%) !important; }
+
+/* Full-color dashboard KPI cards and quick visual hierarchy. */
+.dm-admin-page a.dashboard-card {
+  color: #fff !important;
+  border-color: rgb(255 255 255 / .17) !important;
+  background-image: linear-gradient(135deg, #6328a7 0%, #42156e 100%) !important;
+  box-shadow: 0 12px 30px rgb(16 7 29 / .28) !important;
+}
+.dm-admin-page a.dashboard-card:nth-child(2) { background-image: linear-gradient(135deg, #7c3aed 0%, #54239a 100%) !important; }
+.dm-admin-page a.dashboard-card:nth-child(3) { background-image: linear-gradient(135deg, #5145bd 0%, #30256b 100%) !important; }
+.dm-admin-page a.dashboard-card:nth-child(4) { background-image: linear-gradient(135deg, #8b35ba 0%, #4b1d70 100%) !important; }
+.dm-admin-page a.dashboard-card p,
+.dm-admin-page a.dashboard-card span { color: #fbf7ff; }
+.dm-admin-page a.dashboard-card [class*="bg-amber-50"],
+.dm-admin-page a.dashboard-card [class*="bg-emerald-50"],
+.dm-admin-page a.dashboard-card [class*="bg-sky-50"],
+.dm-admin-page a.dashboard-card [class*="bg-violet-50"] {
+  background: rgb(255 255 255 / .14) !important;
+  color: #ffe4a0 !important;
+}
+.dm-admin-page a.dashboard-card [class*="border-t"] { border-color: rgb(255 255 255 / .2) !important; }
+.dm-admin-page a.dashboard-card:hover { filter: brightness(1.08); }
+.dm-admin-page a.dashboard-card [class*="blur-2xl"] { opacity: .25; }
+
+/* Controls remain high-contrast and keyboard-friendly. */
+.dm-admin-page input,
+.dm-admin-page select,
+.dm-admin-page textarea {
+  color: #faf7ff !important;
+  background-color: #1e1230 !important;
+  border-color: #55406c !important;
+}
+.dm-admin-page input::placeholder,
+.dm-admin-page textarea::placeholder { color: #a99ab9 !important; }
+.dm-admin-page input:focus,
+.dm-admin-page select:focus,
+.dm-admin-page textarea:focus { border-color: #b69aff !important; box-shadow: 0 0 0 4px rgb(139 92 246 / .18) !important; }
+.dm-admin-page option { background: #241535; color: #faf7ff; }
+.dm-admin-page [class~="bg-[#F5B942]"],
+.dm-admin-page [class~="bg-amber-400"],
+.dm-admin-page [class~="bg-amber-500"] { color: #21112d !important; }
+.dm-admin-page a:focus-visible,
+.dm-admin-page button:focus-visible { outline-color: #f5b942; outline-offset: 3px; }
+.dm-admin-page [class~="hover:bg-slate-50"]:hover,
+.dm-admin-page [class~="hover:bg-white"]:hover { background-color: #38234b !important; }
+
+/* Purple login screen */
+.dm-admin-login {
+  min-height: 100vh;
+  color: #f9f5ff;
+  background: #10071d;
+}
+.dm-admin-login__brand-panel {
+  background:
+    radial-gradient(circle at 12% 12%, rgb(139 92 246 / .28), transparent 25rem),
+    radial-gradient(circle at 80% 80%, rgb(245 185 66 / .10), transparent 24rem),
+    linear-gradient(145deg, #10071d 0%, #211035 52%, #3d1c5e 100%);
+}
+.dm-admin-login__form-panel { background: linear-gradient(145deg, #211432 0%, #180d28 100%); }
+.dm-admin-login__input {
+  min-height: 3.25rem;
+  width: 100%;
+  border: 1px solid #57406d;
+  border-radius: .85rem;
+  background: #160b28;
+  color: #fff;
+  padding: .75rem 2.9rem;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.dm-admin-login__input::placeholder { color: #9684ad; }
+.dm-admin-login__input:focus { border-color: #a78bfa; box-shadow: 0 0 0 4px rgb(139 92 246 / .2); }
+.dm-admin-login__button {
+  display: flex;
+  min-height: 3.25rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border-radius: .85rem;
+  background: linear-gradient(100deg, #f5b942 0%, #ffd777 100%);
+  color: #21112d;
+  font-size: .875rem;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgb(245 185 66 / .16);
+  transition: transform .2s ease, filter .2s ease;
+}
+.dm-admin-login__button:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
+.dm-admin-login__button:disabled { opacity: .65; cursor: wait; }
+.dm-admin-login__input:focus-visible, .dm-admin-login a:focus-visible, .dm-admin-login button:focus-visible { outline: 2px solid #f5b942; outline-offset: 3px; }
+.dm-admin-enter { animation: admin-content-enter .42s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes admin-content-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .dm-admin-enter { animation: none !important; }
+}

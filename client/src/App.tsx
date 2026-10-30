@@ -1,34 +1,45 @@
 
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { useAuth } from "./features/auth/AuthProvider";
-import { LoginPage } from "./features/auth/LoginPage";
-import DashboardPage from "./features/dashboard/DashboardPage";
-
-import ProductsPage from "./features/products/ProductsPage";
-import AdminLayout from "./components/admin/AdminLayout";
-import SiteSettingsPage from "./features/site-settings/SiteSettingsPage";
 import HomePage from "./pages/HomePage";
 import CategoriesPage from "./pages/CategoriesPage";
 import CategoryProductsPage from "./pages/CategoryProductsPage";
-import AdminCategoriesPage from "./features/categories/AdminCategoriesPage";
+
 import FloatingWhatsAppButton from "./components/public/FloatingWhatsAppButton";
-import ProductDetailPage from "./features/products/ProductDetailPage.professional";
 import PublicProductDetailPage from "./components/public/PublicProductDetailPage";
 
+import AdminLayout from "./components/admin/component/AdminLayout";
+import { useAuth } from "./features/auth/AuthProvider";
+import { LoginPage } from "./features/auth/LoginPage";
+
+import DashboardPage from "./features/dashboard/DashboardPage";
+import ProductsPage from "./features/products/ProductsPage";
+import AdminCategoriesPage from "./features/categories/AdminCategoriesPage";
+import AdminCategoryProductsPage from "./features/categories/AdminCategoryProductsPage";
+import SiteSettingsPage from "./features/site-settings/SiteSettingsPage";
+import AdminProductDetailPage from "./features/products/AdminProductDetailPage";
 
 export default function App() {
   const { admin, loading } = useAuth();
 
-  // Wait until the existing authentication session is restored.
+  // Restore the existing authentication session.
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-amber-500" />
-          <p className="text-sm font-medium text-slate-600">
-            Loading your workspace...
-          </p>
+      <div className="flex min-h-screen items-center justify-center bg-[#160B28] px-5">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative flex h-14 w-14 items-center justify-center">
+            <div className="absolute inset-0 animate-spin rounded-full border-[3px] border-[#493459] border-t-[#F5B942]" />
+            <div className="h-3 w-3 rounded-full bg-[#F5B942]" />
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm font-bold tracking-wide text-white">
+              DAMMY MULTITRADE VENTURES
+            </p>
+            <p className="mt-1 text-xs text-[#C4B6D5]">
+              Preparing your workspace...
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -37,20 +48,22 @@ export default function App() {
   return (
     <>
       <Routes>
-        {/* Public pages */}
+        {/* PUBLIC WEBSITE */}
         <Route path="/" element={<HomePage />} />
+
         <Route path="/categories" element={<CategoriesPage />} />
-       
+
         <Route
           path="/categories/:slug"
           element={<CategoryProductsPage />}
         />
-        <Route
-  path="/products/:slug"
-  element={<PublicProductDetailPage />}
-/>
 
-        {/* Admin login */}
+        <Route
+          path="/products/:slug"
+          element={<PublicProductDetailPage />}
+        />
+
+        {/* ADMIN LOGIN */}
         <Route
           path="/admin/login"
           element={
@@ -62,7 +75,7 @@ export default function App() {
           }
         />
 
-        {/* Protected admin pages */}
+        {/* PROTECTED ADMIN WORKSPACE */}
         <Route
           path="/admin"
           element={
@@ -73,17 +86,41 @@ export default function App() {
             )
           }
         >
+          {/* Dashboard overview */}
           <Route index element={<DashboardPage />} />
-          <Route path="categories" element={<AdminCategoriesPage />} />
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="settings" element={<SiteSettingsPage />} />
-           <Route
-  path="products/:id"
-  element={<ProductDetailPage />}
-/>
+
+          {/* Category management */}
+          <Route
+            path="categories"
+            element={<AdminCategoriesPage />}
+          />
+
+          {/* Products belonging to a particular category */}
+          <Route
+            path="categories/:id/products"
+            element={<AdminCategoryProductsPage />}
+          />
+
+          {/* All products */}
+          <Route
+            path="products"
+            element={<ProductsPage />}
+          />
+
+          {/* Individual product details */}
+          <Route
+            path="products/:id"
+            element={<AdminProductDetailPage />}
+          />
+
+          {/* Website configuration */}
+          <Route
+            path="settings"
+            element={<SiteSettingsPage />}
+          />
         </Route>
 
-        {/* Unknown routes */}
+        {/* UNKNOWN ROUTES */}
         <Route
           path="*"
           element={
@@ -92,7 +129,7 @@ export default function App() {
         />
       </Routes>
 
-      {/* Floating WhatsApp button available across all routes */}
+      {/* Floating WhatsApp button */}
       <FloatingWhatsAppButton />
     </>
   );

@@ -52,6 +52,7 @@ interface Product {
 interface Props {
   product: Product | null;
   categories: Category[];
+  defaultCategoryId?: string;
   onClose: () => void;
   onSaved: (product: Product) => void;
 }
@@ -60,10 +61,10 @@ const MAX_IMAGES = 10;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const inputClass =
-  "min-h-12 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:ring-4 focus:ring-amber-100";
+  "min-h-12 w-full rounded-xl border border-[#493459] bg-[#241333] px-3.5 text-sm text-[#F0E8F8] outline-none transition placeholder:text-[#9F8DB4] focus:border-amber-400 focus:ring-4 focus:ring-amber-100";
 
 const labelClass =
-  "mb-2 block text-sm font-semibold text-slate-700";
+  "mb-2 block text-sm font-semibold text-[#E1D5ED]";
 
 function messageOf(error: unknown) {
   return error instanceof Error
@@ -74,12 +75,13 @@ function messageOf(error: unknown) {
 export default function ProductFormModal({
   product,
   categories,
+  defaultCategoryId,
   onClose,
   onSaved,
 }: Props) {
   const [name, setName] = useState(product?.name ?? "");
   const [categoryId, setCategoryId] = useState(
-    product?.categoryId ?? "",
+    product?.categoryId ?? defaultCategoryId ?? "",
   );
   const [availability, setAvailability] = useState<Availability>(
     product?.availability ?? "ON_REQUEST",
@@ -108,7 +110,7 @@ export default function ProductFormModal({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const activeCategories = categories.filter(
-    (category) => category.isActive,
+    (category) => category.isActive || category.id === categoryId,
   );
 
   const existingImages = product?.images ?? [];
@@ -351,7 +353,7 @@ export default function ProductFormModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[#10071D]/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !loading) onClose();
       }}
@@ -360,24 +362,24 @@ export default function ProductFormModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="product-modal-title"
-        className="flex max-h-[96dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:max-h-[92dvh] sm:max-w-3xl sm:rounded-3xl"
+        className="dm-product-modal flex max-h-[96dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[#493459] bg-[#241333] shadow-2xl sm:max-h-[92dvh] sm:max-w-3xl sm:rounded-3xl"
       >
         {/* Header */}
-        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-amber-100 bg-gradient-to-r from-white to-amber-50/70 px-4 py-4 sm:px-7 sm:py-5">
+        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-[#493459] bg-gradient-to-r from-[#241333] to-[#332047] px-4 py-4 sm:px-7 sm:py-5">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-amber-800 sm:text-xs">
+            <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-[#241333] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#F5CB79] sm:text-xs">
               <Package size={13} />
               Product catalogue
             </span>
 
             <h2
               id="product-modal-title"
-              className="mt-3 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl"
+              className="mt-3 text-xl font-extrabold tracking-tight text-[#FAF7FF] sm:text-2xl"
             >
               {product ? "Edit product" : "Add a product"}
             </h2>
 
-            <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
+            <p className="mt-1 text-xs leading-5 text-[#B7A7C9] sm:text-sm">
               Add product details and images for your customers.
             </p>
           </div>
@@ -387,7 +389,7 @@ export default function ProductFormModal({
             onClick={onClose}
             disabled={loading}
             aria-label="Close product form"
-            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-amber-300 hover:bg-amber-50 disabled:opacity-50"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#493459] bg-[#241333] text-[#B7A7C9] transition hover:border-amber-300 hover:bg-[#382A25] disabled:opacity-50"
           >
             <X size={19} />
           </button>
@@ -419,10 +421,10 @@ export default function ProductFormModal({
             {/* Basic information */}
             <section>
               <div className="mb-4">
-                <h3 className="font-bold text-slate-900">
+                <h3 className="font-bold text-[#FAF7FF]">
                   Product information
                 </h3>
-                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                <p className="mt-1 text-xs text-[#B7A7C9] sm:text-sm">
                   Give the product a clear name and assign its category.
                 </p>
               </div>
@@ -464,7 +466,7 @@ export default function ProductFormModal({
                   </select>
 
                   {activeCategories.length === 0 && (
-                    <p className="mt-2 text-xs text-amber-700">
+                    <p className="mt-2 text-xs text-[#F5CB79]">
                       Create or activate a category before adding products.
                     </p>
                   )}
@@ -501,7 +503,7 @@ export default function ProductFormModal({
                     onChange={(event) => setDisplayOrder(event.target.value)}
                     className={inputClass}
                   />
-                  <p className="mt-1.5 text-xs text-slate-500">
+                  <p className="mt-1.5 text-xs text-[#B7A7C9]">
                     Lower numbers appear first.
                   </p>
                 </div>
@@ -509,10 +511,10 @@ export default function ProductFormModal({
             </section>
 
             {/* Images */}
-            <section className="border-t border-slate-100 pt-6">
+            <section className="border-t border-[#493459] pt-6">
               <div className="mb-4">
-                <h3 className="font-bold text-slate-900">Product images</h3>
-                <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
+                <h3 className="font-bold text-[#FAF7FF]">Product images</h3>
+                <p className="mt-1 text-xs leading-5 text-[#B7A7C9] sm:text-sm">
                   Upload clear product photos. JPG, PNG, WebP and AVIF are
                   supported, up to 5 MB per image.
                 </p>
@@ -520,7 +522,7 @@ export default function ProductFormModal({
 
               {existingImages.length > 0 && (
                 <div className="mb-5">
-                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[#B7A7C9]">
                     Current images
                   </p>
 
@@ -528,20 +530,20 @@ export default function ProductFormModal({
                     {existingImages.map((image) => (
                       <div
                         key={image.id}
-                        className={`overflow-hidden rounded-xl border bg-white ${
+                        className={`overflow-hidden rounded-xl border bg-[#241333] ${
                           primaryExistingId === image.id
                             ? "border-amber-400 ring-2 ring-amber-100"
-                            : "border-slate-200"
+                            : "border-[#493459]"
                         }`}
                       >
-                        <div className="relative aspect-square bg-slate-50">
+                        <div className="relative aspect-square bg-[#1B1029]">
                           <img
                             src={image.url}
                             alt={image.altText || "Product"}
                             className="size-full object-cover"
                           />
                           {image.isPrimary && (
-                            <span className="absolute left-2 top-2 rounded-full bg-amber-400 px-2 py-1 text-[10px] font-extrabold text-slate-900">
+                            <span className="absolute left-2 top-2 rounded-full bg-[#F5B942] px-2 py-1 text-[10px] font-extrabold text-[#FAF7FF]">
                               Primary
                             </span>
                           )}
@@ -550,7 +552,7 @@ export default function ProductFormModal({
                             disabled={loading}
                             onClick={() => void deleteExistingImage(image.id)}
                             aria-label="Remove existing image"
-                            className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-lg bg-white/95 text-rose-600 shadow-sm hover:bg-rose-50 disabled:opacity-50"
+                            className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-lg bg-[#241333]/95 text-rose-600 shadow-sm hover:bg-rose-50 disabled:opacity-50"
                           >
                             <X size={15} />
                           </button>
@@ -561,14 +563,14 @@ export default function ProductFormModal({
                           onClick={() =>
                             void makeExistingImagePrimary(image.id)
                           }
-                          className="flex min-h-10 w-full items-center justify-center gap-1.5 px-2 text-xs font-semibold text-slate-700 hover:bg-amber-50 disabled:cursor-default"
+                          className="flex min-h-10 w-full items-center justify-center gap-1.5 px-2 text-xs font-semibold text-[#E1D5ED] hover:bg-[#382A25] disabled:cursor-default"
                         >
                           <Star
                             size={13}
                             className={
                               image.isPrimary
                                 ? "fill-amber-400 text-amber-500"
-                                : "text-slate-400"
+                                : "text-[#9F8DB4]"
                             }
                           />
                           {image.isPrimary ? "Primary image" : "Make primary"}
@@ -581,27 +583,27 @@ export default function ProductFormModal({
 
               {previews.length > 0 && (
                 <div className="mb-4">
-                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[#B7A7C9]">
                     New images
                   </p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                     {previews.map((preview, index) => (
                       <div
                         key={`${images[index]?.name}-${index}`}
-                        className={`overflow-hidden rounded-xl border bg-white ${
+                        className={`overflow-hidden rounded-xl border bg-[#241333] ${
                           primaryNewIndex === index
                             ? "border-amber-400 ring-2 ring-amber-100"
-                            : "border-slate-200"
+                            : "border-[#493459]"
                         }`}
                       >
-                        <div className="relative aspect-square bg-slate-50">
+                        <div className="relative aspect-square bg-[#1B1029]">
                           <img
                             src={preview}
                             alt={images[index]?.name || "New product image"}
                             className="size-full object-cover"
                           />
                           {primaryNewIndex === index && (
-                            <span className="absolute left-2 top-2 rounded-full bg-amber-400 px-2 py-1 text-[10px] font-extrabold text-slate-900">
+                            <span className="absolute left-2 top-2 rounded-full bg-[#F5B942] px-2 py-1 text-[10px] font-extrabold text-[#FAF7FF]">
                               Primary
                             </span>
                           )}
@@ -609,7 +611,7 @@ export default function ProductFormModal({
                             type="button"
                             onClick={() => removeNewImage(index)}
                             aria-label="Remove selected image"
-                            className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-lg bg-white/95 text-rose-600 shadow-sm hover:bg-rose-50"
+                            className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-lg bg-[#241333]/95 text-rose-600 shadow-sm hover:bg-rose-50"
                           >
                             <X size={15} />
                           </button>
@@ -620,14 +622,14 @@ export default function ProductFormModal({
                             setPrimaryNewIndex(index);
                             setPrimaryExistingId("");
                           }}
-                          className="flex min-h-10 w-full items-center justify-center gap-1.5 px-2 text-xs font-semibold text-slate-700 hover:bg-amber-50"
+                          className="flex min-h-10 w-full items-center justify-center gap-1.5 px-2 text-xs font-semibold text-[#E1D5ED] hover:bg-[#382A25]"
                         >
                           <Star
                             size={13}
                             className={
                               primaryNewIndex === index
                                 ? "fill-amber-400 text-amber-500"
-                                : "text-slate-400"
+                                : "text-[#9F8DB4]"
                             }
                           />
                           {primaryNewIndex === index
@@ -644,22 +646,22 @@ export default function ProductFormModal({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex min-h-36 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-amber-200 bg-amber-50/40 px-4 py-6 text-center transition hover:border-amber-400 hover:bg-amber-50"
+                  className="flex min-h-36 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-amber-200 bg-[#332047] px-4 py-6 text-center transition hover:border-amber-400 hover:bg-[#382A25]"
                 >
-                  <span className="flex size-12 items-center justify-center rounded-2xl bg-white text-amber-700 shadow-sm">
+                  <span className="flex size-12 items-center justify-center rounded-2xl bg-[#241333] text-[#F5CB79] shadow-sm">
                     {images.length ? (
                       <ImagePlus size={23} />
                     ) : (
                       <Upload size={22} />
                     )}
                   </span>
-                  <span className="mt-3 text-sm font-bold text-slate-800">
+                  <span className="mt-3 text-sm font-bold text-[#F0E8F8]">
                     Add product photos
                   </span>
-                  <span className="mt-1 text-xs text-slate-500">
+                  <span className="mt-1 text-xs text-[#B7A7C9]">
                     Tap to browse your device
                   </span>
-                  <span className="mt-2 text-[11px] font-medium text-amber-800">
+                  <span className="mt-2 text-[11px] font-medium text-[#F5CB79]">
                     {existingImages.length + images.length} of {MAX_IMAGES}{" "}
                     images selected
                   </span>
@@ -676,25 +678,25 @@ export default function ProductFormModal({
               />
 
               {!product && images.length === 0 && (
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-[#B7A7C9]">
                   Upload at least one image to create the product.
                 </p>
               )}
             </section>
 
             {/* Publication settings */}
-            <section className="border-t border-slate-100 pt-6">
+            <section className="border-t border-[#493459] pt-6">
               <div className="mb-4">
-                <h3 className="font-bold text-slate-900">
+                <h3 className="font-bold text-[#FAF7FF]">
                   Publishing settings
                 </h3>
-                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                <p className="mt-1 text-xs text-[#B7A7C9] sm:text-sm">
                   Choose how this product appears in your public catalogue.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-amber-300 hover:bg-amber-50/40">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#493459] p-4 transition hover:border-amber-300 hover:bg-[#332047]">
                   <input
                     type="checkbox"
                     checked={isPublished}
@@ -702,10 +704,10 @@ export default function ProductFormModal({
                     className="mt-1 size-4 accent-amber-500"
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-bold text-slate-800">
+                    <span className="block text-sm font-bold text-[#F0E8F8]">
                       Publish product
                     </span>
-                    <span className="mt-1 block text-xs leading-5 text-slate-500">
+                    <span className="mt-1 block text-xs leading-5 text-[#B7A7C9]">
                       Make the product visible in the public catalogue.
                     </span>
                   </span>
@@ -713,14 +715,14 @@ export default function ProductFormModal({
                     className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${
                       isPublished
                         ? "bg-emerald-50 text-emerald-700"
-                        : "bg-slate-100 text-slate-600"
+                        : "bg-slate-100 text-[#C4B6D5]"
                     }`}
                   >
                     {isPublished ? "Published" : "Draft"}
                   </span>
                 </label>
 
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-amber-300 hover:bg-amber-50/40">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#493459] p-4 transition hover:border-amber-300 hover:bg-[#332047]">
                   <input
                     type="checkbox"
                     checked={isFeatured}
@@ -728,18 +730,18 @@ export default function ProductFormModal({
                     className="mt-1 size-4 accent-amber-500"
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-bold text-slate-800">
+                    <span className="block text-sm font-bold text-[#F0E8F8]">
                       Feature this product
                     </span>
-                    <span className="mt-1 block text-xs leading-5 text-slate-500">
+                    <span className="mt-1 block text-xs leading-5 text-[#B7A7C9]">
                       Mark this product for featured sections where supported.
                     </span>
                   </span>
                   <span
                     className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${
                       isFeatured
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-slate-100 text-slate-400"
+                        ? "bg-amber-100 text-[#F5CB79]"
+                        : "bg-slate-100 text-[#9F8DB4]"
                     }`}
                   >
                     <Star
@@ -753,12 +755,12 @@ export default function ProductFormModal({
           </div>
 
           {/* Sticky footer */}
-          <footer className="sticky bottom-0 flex shrink-0 flex-col-reverse gap-3 border-t border-slate-100 bg-white/95 px-4 py-4 backdrop-blur sm:flex-row sm:justify-end sm:px-7">
+          <footer className="sticky bottom-0 flex shrink-0 flex-col-reverse gap-3 border-t border-[#493459] bg-[#241333]/95 px-4 py-4 backdrop-blur sm:flex-row sm:justify-end sm:px-7">
             <button
               type="button"
               disabled={loading}
               onClick={onClose}
-              className="min-h-12 rounded-xl border border-slate-200 px-5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
+              className="min-h-12 rounded-xl border border-[#493459] px-5 text-sm font-semibold text-[#E1D5ED] transition hover:bg-[#1B1029] disabled:opacity-50"
             >
               Cancel
             </button>
@@ -770,7 +772,7 @@ export default function ProductFormModal({
                 activeCategories.length === 0 ||
                 (!product && images.length === 0)
               }
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 text-sm font-extrabold text-slate-950 shadow-sm transition hover:bg-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#F5B942] px-6 text-sm font-extrabold text-slate-950 shadow-sm transition hover:bg-[#382A25]0 focus:outline-none focus:ring-4 focus:ring-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <LoaderCircle size={18} className="animate-spin" />
@@ -786,6 +788,16 @@ export default function ProductFormModal({
           </footer>
         </form>
       </section>
+      <style>{`
+        @keyframes dm-product-modal-in {
+          from { opacity: 0; transform: translateY(16px) scale(.985); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .dm-product-modal { animation: dm-product-modal-in 240ms cubic-bezier(.2,.8,.2,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+          .dm-product-modal { animation: none; }
+        }
+      `}</style>
     </div>
   );
 }
