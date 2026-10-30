@@ -4,7 +4,7 @@ import {
   ArrowUpRight,
   Boxes,
   CheckCircle2,
-  
+  Clock3,
   Image as ImageIcon,
   Layers3,
   Package,
