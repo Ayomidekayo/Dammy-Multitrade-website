@@ -17,6 +17,7 @@ app.disable("x-powered-by");
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://dammymultitradeventures.com",
   "https://www.dammymultitradeventures.com",
   "https://dammy-multitrade-website-vawj.vercel.app",
   
