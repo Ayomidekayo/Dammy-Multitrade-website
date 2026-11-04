@@ -19,11 +19,34 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://dammymultitradeventures.com",
   "https://www.dammymultitradeventures.com",
-  "'https://dammy-multitrade-website-fvgn.vercel.app",
-  "https://dammy-multitrade-website-vawj.vercel.app",
-  
   env.CLIENT_URL,
-].filter((origin): origin is string => Boolean(origin));
+]
+  .filter((origin): origin is string => Boolean(origin))
+  .map((origin) => origin.trim().replace(/\/+$/, ""));
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const normalizedOrigin = origin.trim().replace(/\/+$/, "");
+
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      console.error("Blocked CORS origin:", origin);
+
+      return callback(new Error(`Origin not allowed: ${origin}`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
+  }),
+);
 
 app.use(
   cors({
