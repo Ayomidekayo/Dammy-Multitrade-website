@@ -475,14 +475,6 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type CategoryCreateNestedOneWithoutProductsInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutProductsInput, Prisma.CategoryUncheckedCreateWithoutProductsInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutProductsInput

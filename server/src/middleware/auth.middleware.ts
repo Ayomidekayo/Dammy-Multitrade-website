@@ -7,6 +7,7 @@ import { authService } from "../modules/auth/auth.service";
 interface AdminTokenPayload {
   sub: string;
   role: string;
+  tokenVersion?: number;
 }
 
 export async function requireAdmin(
@@ -14,7 +15,7 @@ export async function requireAdmin(
   res: Response,
   next: NextFunction,
 ) {
-  const authorization = res.req?.headers.authorization;
+  const authorization = _req.headers.authorization;
 
   if (!authorization?.startsWith("Bearer ")) {
     return res.status(401).json({
@@ -46,12 +47,21 @@ export async function requireAdmin(
       });
     }
 
-    const payload: AdminTokenPayload = {
-      sub: decoded.sub,
-      role: typeof decoded.role === "string" ? decoded.role : "",
-    };
+    const payload = decoded as jwt.JwtPayload & AdminTokenPayload;
+
+    const tokenVersion =
+      typeof payload.tokenVersion === "number"
+        ? payload.tokenVersion
+        : 0;
 
     const admin = await authService.getCurrentAdmin(payload.sub);
+
+    if (admin.tokenVersion !== tokenVersion) {
+      return res.status(401).json({
+        success: false,
+        message: "Your session has expired. Please log in again.",
+      });
+    }
 
     res.locals.admin = {
       id: admin.id,
@@ -62,17 +72,17 @@ export async function requireAdmin(
 
     return next();
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid or expired authentication token.",
-      });
-    }
-
     if (error instanceof jwt.TokenExpiredError) {
       return res.status(401).json({
         success: false,
         message: "Authentication token has expired.",
+      });
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid authentication token.",
       });
     }
 

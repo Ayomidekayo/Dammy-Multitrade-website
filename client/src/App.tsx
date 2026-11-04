@@ -18,6 +18,7 @@ import AdminCategoriesPage from "./features/categories/AdminCategoriesPage";
 import AdminCategoryProductsPage from "./features/categories/AdminCategoryProductsPage";
 import SiteSettingsPage from "./features/site-settings/SiteSettingsPage";
 import AdminProductDetailPage from "./features/products/AdminProductDetailPage";
+import SecuritySettingsPage from "./features/site-settings/SecuritySettingsPage";
 
 export default function App() {
   const { admin, loading } = useAuth();
@@ -117,6 +118,11 @@ export default function App() {
           <Route
             path="settings"
             element={<SiteSettingsPage />}
+          />
+
+           <Route
+            path="security"
+            element={<SecuritySettingsPage />}
           />
         </Route>
 

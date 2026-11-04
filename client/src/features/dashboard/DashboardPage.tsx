@@ -11,6 +11,7 @@ import {
   Plus,
   RefreshCw,
   Settings2,
+  Shield,
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
@@ -173,6 +174,14 @@ const quickActions: Array<{
     to: "/admin/settings",
     accent: "green",
   },
+  {
+    title: "Security settings",
+    description: "Manage security preferences and access controls.",
+    icon: Shield,
+    to: "/admin/security",
+    accent: "purple",
+  }
+
 ];
 
 export default function DashboardPage() {

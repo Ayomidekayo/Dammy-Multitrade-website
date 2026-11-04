@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 
 import { env } from "../../config/env";
 import { AuthError, authService } from "./auth.service";
-import { loginSchema } from "./auth.validation";
+import { changePasswordSchema, loginSchema } from "./auth.validation";
 
 export class AuthController {
   async login(req: Request, res: Response) {
@@ -78,6 +78,53 @@ export class AuthController {
       });
     }
   }
+
+  async changePassword(req: Request, res: Response) {
+  const validation = changePasswordSchema.safeParse(req.body);
+
+  if (!validation.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid password details.",
+      errors: validation.error.flatten(),
+    });
+  }
+
+  try {
+    const adminId = res.locals.admin?.id as string | undefined;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication is required.",
+      });
+    }
+
+    const result = await authService.changePassword(
+      adminId,
+      validation.data,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    console.error("Changing password failed:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to change password.",
+    });
+  }
+}
 }
 
 export const authController = new AuthController();

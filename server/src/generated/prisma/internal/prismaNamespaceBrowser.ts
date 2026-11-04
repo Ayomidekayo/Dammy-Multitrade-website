@@ -81,6 +81,7 @@ export const AdminScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   role: 'role',
+  tokenVersion: 'tokenVersion',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -110,8 +111,6 @@ export const ProductScalarFieldEnum = {
   categoryId: 'categoryId',
   name: 'name',
   slug: 'slug',
-  description: 'description',
-  price: 'price',
   availability: 'availability',
   isPublished: 'isPublished',
   isFeatured: 'isFeatured',

@@ -10,5 +10,10 @@ router.post("/login", (req, res) => authController.login(req, res));
 router.get("/me", requireAdmin, (req, res) =>
   authController.me(req, res),
 );
+router.patch(
+  "/change-password",
+  requireAdmin,
+  (req, res) => authController.changePassword(req, res),
+);
 
 export default router;
