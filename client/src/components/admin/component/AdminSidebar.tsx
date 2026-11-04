@@ -14,7 +14,7 @@ const navigation = [
   { label: "Products", path: "/admin/products", icon: Package },
   { label: "Website settings", path: "/admin/settings", icon: Settings2 },
   {
-  label: "Security",
+  label: "Chaange Password",
   path: "/admin/security",
   icon: ShieldCheck,
 }
